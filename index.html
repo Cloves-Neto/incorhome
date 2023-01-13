@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animação menu</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        body{
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            background-color: rgb(255, 255, 255);
+
+        }
+        header{
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 5px 0px 10px 10px rgba(128, 128, 128, 0.123); 
+            transition: height ease-in-out 2s;
+        }
+        .container-logo{
+            width: 100%;
+            height: 100%;
+            background-color: rgb(255, 255, 255);
+            position: relative;
+            transition: width 2s ease-in-out;
+        }
+        .container-logo svg{
+            width: 500px;
+            position: absolute;
+            z-index: 10;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: width ease-in 2s, left ease-in-out 2s, transform ease-in-out 2s; 
+        }
+        .resize{
+            height: 80px;
+        }
+        .resize .container-logo{
+            width: 30%;
+        }
+        .resize .container-logo svg{
+            width: 200px;
+            left: 0;
+            transform: translate(50px, -50%);
+        }
+        /* Menu aparece depois do resize do header e logo -- animação fade  */
+        ul{
+            position: absolute;
+            z-index: 5;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 2s ease-in-out, width 1s ease, transform 2s ease-out;
+            transition-delay: 2s;
+            display: flex;
+            align-items: center;
+            padding-right: 50px;
+            justify-content: flex-end;
+        }
+        ul li{
+            display: flex;
+            flex-direction: row !important;
+            color: rgb(61, 61, 61) !important;
+            font-size: 14px;
+            font-weight: bolder;
+            margin-left: 20px;
+            text-transform: uppercase;
+            font-family: Arial, Helvetica, sans-serif;
+
+        }
+        ul li:hover{
+            color: rgb(255, 24, 62) !important;
+            cursor: pointer; 
+        }
+        .menu{
+            transform: translateX(0);
+            right: 0;
+            top: 0;
+            width: 70%;
+            height: 100%;
+            opacity: 1;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <header id="container-top">
+        <section class="container-logo" id="container-logo">
+            <div class="logo" id="logo">
+                <svg width="293" height="78" viewBox="0 0 293 78" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <rect width="293" height="78" fill="url(#pattern0)"/>
+                    <defs>
+                        <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                            <use xlink:href="#image0_9_2" transform="translate(-0.0179026) scale(0.00484021 0.0181818)"/>
+                        </pattern>
+                        <image id="image0_9_2" width="214" height="55" xlink:href="data:image/png;base64,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"/>
+                    </defs>
+                </svg>
+        </section>
+        <nav >
+            <ul id="menu">
+                <li>
+                    home
+                </li>
+                <li>
+                    faq
+                </li>
+                <li>
+                    casa e coisa
+                </li>
+                <li>
+                    sala de jantar
+                </li>
+                <li>
+                    quarto e cozinha
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+<script>
+
+    setTimeout(function(){
+        const header = document.getElementById('container-top');
+        const menu = document.getElementById('menu');
+
+        header.classList.add('resize');
+        menu.classList.add('menu');
+        
+    },3000)
+    
+
+</script>
+</body>
+</html>
